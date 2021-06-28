@@ -80,8 +80,6 @@ def Qcov_to_bcov(Qcov,bcov):
     return np.int32(bcov)
 
 
-# In[71]:
-
 
 #binary_bit_to_real_value_function
 
@@ -95,8 +93,7 @@ def bcw_to_real_cw(bcw,tau_cw,tau_value,sigma,real_cw,_max,_min):
                 for d in range (filter_depth):
                     dec = np.int32(np.polyval(bcw[i,j,d,num,:],2))
                     mu = _min+(_range*(dec+1))-_range_helf
-                    real_cw[i,j,d,num]=np.random.normal( mu
-                                                         ,sigma*np.power(tau_value,tau_cw[i,j,d,num,dec]))
+                    real_cw[i,j,d,num]=np.random.normal( mu,sigma*np.power(tau_value,tau_cw[i,j,d,num,dec]))
         
                     tau_cw[i,j,d,num,dec]=tau_cw[i,j,d,num,dec]+1
     return real_cw
@@ -108,8 +105,7 @@ def bcb_to_real_cb(bcb,tau_cb,tau_value,sigma,real_cb,_max,_min):
     for num in range (filter_num):
         dec = np.int32(np.polyval(bcb[num,:],2))
         mu = _min+(_range*(dec+1))-_range_helf
-        real_cb[num,0]=np.random.normal( mu
-                                         ,sigma*np.power(tau_value,tau_cb[num,dec]))
+        real_cb[num,0]=np.random.normal( mu,sigma*np.power(tau_value,tau_cb[num,dec]))
        
         tau_cb[num,dec]=tau_cb[num,dec]+1
     return real_cb
@@ -122,8 +118,7 @@ def bfw_to_real_fw(bfw,tau_fw,tau_value,sigma,real_fw,_max,_min):
         for j in range (fw_j):
             dec = np.int32(np.polyval(bfw[i,j,:],2))
             mu = _min+(_range*(dec+1))-_range_helf
-            real_fw[i,j]=np.random.normal( mu
-                                           ,sigma*np.power(tau_value,tau_fw[i, j, dec]))
+            real_fw[i,j]=np.random.normal( mu,sigma*np.power(tau_value,tau_fw[i, j, dec]))
             
             tau_fw[i, j, dec]=tau_fw[i, j, dec]+1
     return real_fw
@@ -135,15 +130,10 @@ def bfb_to_real_fb(bfb,tau_fb,tau_value,sigma,real_fb,_max,_min):
     for j in range (fb_j):
         dec = np.int32(np.polyval(bfb[j,:],2))
         mu = _min+(_range*(dec+1))-_range_helf                                  
-        real_fb[j]=np.random.normal( mu
-                                    ,sigma*np.power(tau_value,tau_fb[j,dec]))
+        real_fb[j]=np.random.normal( mu,sigma*np.power(tau_value,tau_fb[j,dec]))
        
         tau_fb[j,dec]=tau_fb[j,dec]+1
     return real_fb
-
-
-# In[72]:
-
 
 # qconv_function
 
@@ -175,9 +165,6 @@ def qconv(input_feature,_filter_np,decide_conv_array,biases_np,conv_output,model
     return conv_output
 
 
-# In[73]:
-
-
 # quantum_gate_funciton
 
 def Q_update(Q, b, Sub_best_b, rotate_angle):
@@ -189,9 +176,6 @@ def Q_update(Q, b, Sub_best_b, rotate_angle):
     Q[address2] = np.dot(Q[address2] , np.cos(rotate_angle)) - np.dot( np.sqrt((1-np.square(Q[address2]))) , np.sin(rotate_angle) )
     
     return Q
-
-
-# In[74]:
 
 
 #mean_squared_error
@@ -206,9 +190,6 @@ def mse(y_test,y_preditc):
     #else:
         #mse=np.sum((y_preditc-y_test)**2)/len(y_test)
     return mse
-
-
-# In[75]:
 
 
 def fix(y_test,y_preditc):
@@ -231,8 +212,6 @@ def fix(y_test,y_preditc):
     
     return y_preditc+error
 
-
-# In[76]:
 
 
 #data_input
@@ -401,7 +380,6 @@ Sub_best_fw2 = np.ones([128,1],dtype=np.float32)
 Sub_best_fb2 = np.ones([1],dtype=np.float32)
 
 
-# In[79]:
 
 
 #卷積層1 tanh sigmoid
