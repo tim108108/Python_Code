@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -37,10 +36,6 @@ def initail_Qfb(master, sub, j, bit_length):
 def initail_Qcov(master, sub, out_i, out_j, filter_num):
     Qcov = np.full( (master, sub, out_i, out_j, filter_num), 1/np.sqrt(2),dtype=np.float32)
     return Qcov
-
-
-# In[70]:
-
 
 #quantum_bit_to_binary_bit_function
 
