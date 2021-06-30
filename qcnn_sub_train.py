@@ -15,10 +15,10 @@ import joblib
 
 from keras.layers import LeakyReLU
 
-#initail_quantum_bit_function
+#initail_quantum_bit_function  用1/^2填滿張量
 
 def initail_Qcw(master, sub, filter_i, filter_j, filter_depth, filter_num, bit_length):
-    Qcw = np.full( (master, sub, filter_i, filter_j, filter_depth, filter_num, bit_length), 1/np.sqrt(2),dtype=np.float32)
+    Qcw = np.full( (master, sub, filter_i, filter_j, filter_depth, filter_num, bit_length), 1/np.sqrt(2),dtype=np.float32) #
     return Qcw
 
 def initail_Qcb(master, sub, filter_num, bit_length):
@@ -37,7 +37,9 @@ def initail_Qcov(master, sub, out_i, out_j, filter_num):
     Qcov = np.full( (master, sub, out_i, out_j, filter_num), 1/np.sqrt(2),dtype=np.float32)
     return Qcov
 
-#quantum_bit_to_binary_bit_function
+
+
+#quantum_bit_to_binary_bit_function  用random函數觀測
 
 def Qcw_to_bcw(Qcw,bcw):
     filter_i, filter_j, filter_depth, filter_num, bit_length = Qcw.shape
@@ -81,7 +83,7 @@ def Qcov_to_bcov(Qcov,bcov):
 
 
 
-#binary_bit_to_real_value_function
+#binary_bit_to_real_value_function  輸入亂數中點與標準差產生實數
 
 def bcw_to_real_cw(bcw,tau_cw,tau_value,sigma,real_cw,_max,_min):
     filter_i, filter_j, filter_depth, filter_num, bit_length = bcw.shape
@@ -135,7 +137,7 @@ def bfb_to_real_fb(bfb,tau_fb,tau_value,sigma,real_fb,_max,_min):
         tau_fb[j,dec]=tau_fb[j,dec]+1
     return real_fb
 
-# qconv_function
+# qconv_function  判斷是否捲積
 
 def qconv(input_feature,_filter_np,decide_conv_array,biases_np,conv_output,model_cov1):
     filter_i ,filter_j, feature_depth, filter_num= _filter_np.shape
@@ -165,7 +167,7 @@ def qconv(input_feature,_filter_np,decide_conv_array,biases_np,conv_output,model
     return conv_output
 
 
-# quantum_gate_funciton
+# quantum_gate_funciton  依據公式更新位元
 
 def Q_update(Q, b, Sub_best_b, rotate_angle):
     
@@ -178,7 +180,7 @@ def Q_update(Q, b, Sub_best_b, rotate_angle):
     return Q
 
 
-#mean_squared_error
+#mean_squared_error  均方誤差loss function
 def mse(y_test,y_preditc):
     error = y_preditc-y_test
     #error[np.where(error > 0.15)] = error[np.where(error > 0.15)]**3
@@ -244,6 +246,7 @@ train_x_disorder, test_x_disorder, train_y_disorder, test_y_disorder = train_tes
 #test_x_disorder_log = np.log(test_x_disorder)         #取log
 
 #標準化
+
 x_min_max_scaler = MinMaxScaler().fit(x_Amplification) #以 全部資料 為最大最小標準化 的標準
 y_min_max_scaler = MinMaxScaler().fit(train_y_disorder)
 joblib.dump(x_min_max_scaler, 'QCNNscaler201804260428x.pkl') #將x_min_max_scaler縮放標準儲存
@@ -255,9 +258,6 @@ y_train=y_min_max_scaler.transform(train_y_disorder)
 x_test=x_min_max_scaler.transform(test_x_disorder)#以x_train_data 為最大最小標準化 的標準 去對x_test_data 進行最大最小標準化
 y_test=y_min_max_scaler.transform(test_y_disorder)
 
-
-
-# In[77]:
 
 
 x_train = np.float32(np.reshape(x_train, [-1, 5, 5, 1]))
@@ -279,8 +279,6 @@ print(y_train.dtype)
 print(y_test.shape)
 print(y_test.dtype)
 
-
-# In[78]:
 
 
 #parameters
@@ -433,8 +431,6 @@ model_dense.add(Dense(1,name="output_layer"))
 model_dense.add(Activation('sigmoid'))
 model_dense.build(input_shape=[None, 1,1,24])
 
-
-# In[80]:
 
 
 
@@ -604,6 +600,7 @@ for k in range (epoach):
                 np.save('mid_Sub_best_fb2.npy',Sub_best_fb2 )
          
     print('loss_train_fitness',Sub_best_fitness)
+    # 將最佳解遷移
     if k%mutation==0:
             for j in range (sub):
                 Qcw1[i,j] = Sub_best_Qcw1
